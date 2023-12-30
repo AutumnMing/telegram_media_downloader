@@ -39,7 +39,7 @@ def update_config(config: dict):
         Configuration to be written into config file.
     """
     config["ids_to_retry"] = (
-        list(set(config["ids_to_retry"]) - set(DOWNLOADED_IDS)) + FAILED_IDS
+            list(set(config["ids_to_retry"]) - set(DOWNLOADED_IDS)) + FAILED_IDS
     )
     with open("config.yaml", "w") as yaml_file:
         yaml.dump(config, yaml_file, default_flow_style=False)
@@ -91,8 +91,8 @@ def _is_exist(file_path: str) -> bool:
 
 
 async def _get_media_meta(
-    media_obj: Union[Audio, Document, Photo, Video, VideoNote, Voice],
-    _type: str,
+        media_obj: Union[Audio, Document, Photo, Video, VideoNote, Voice],
+        _type: str,
 ) -> Tuple[str, Optional[str]]:
     """Extract file name and file id from media object.
 
@@ -134,10 +134,10 @@ async def _get_media_meta(
 
 
 async def download_media(
-    client: pyrogram.client.Client,
-    message: pyrogram.types.Message,
-    media_types: List[str],
-    file_formats: dict,
+        client: pyrogram.client.Client,
+        message: pyrogram.types.Message,
+        media_types: List[str],
+        file_formats: dict,
 ):
     """
     Download media from Telegram.
@@ -238,10 +238,10 @@ async def download_media(
 
 
 async def process_messages(
-    client: pyrogram.client.Client,
-    messages: List[pyrogram.types.Message],
-    media_types: List[str],
-    file_formats: dict,
+        client: pyrogram.client.Client,
+        messages: List[pyrogram.types.Message],
+        media_types: List[str],
+        file_formats: dict,
 ) -> int:
     """
     Download media from Telegram.
