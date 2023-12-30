@@ -24,6 +24,7 @@ logging.getLogger("pyrogram.session.session").addFilter(LogFilter())
 logging.getLogger("pyrogram.client").addFilter(LogFilter())
 logger = logging.getLogger("media_downloader")
 
+# 获取文件夹路径
 THIS_DIR = os.path.dirname(os.path.abspath(__file__))
 FAILED_IDS: list = []
 DOWNLOADED_IDS: list = []
@@ -68,14 +69,14 @@ def _can_download(_type: str, file_formats: dict, file_format: Optional[str]) ->
     """
     if _type in ["audio", "document", "video"]:
         allowed_formats: list = file_formats[_type]
-        if not file_format in allowed_formats and allowed_formats[0] != "all":
+        if (file_format not in allowed_formats) and allowed_formats[0] != "all":
             return False
     return True
 
 
 def _is_exist(file_path: str) -> bool:
     """
-    Check if a file exists and it is not a directory.
+    Check if a file exists, and it is not a directory.
 
     Parameters
     ----------
@@ -147,12 +148,9 @@ async def download_media(
 
     Parameters
     ----------
-    client: pyrogram.client.Client
-        Client to interact with Telegram APIs.
-    message: pyrogram.types.Message
-        Message object retrieved from telegram.
-    media_types: list
-        List of strings of media types to be downloaded.
+    client: pyrogram.client.Client         to interact with Telegram APIs.
+    message: pyrogram.types.Message         object retrieved from telegram.
+    media_types: list         of strings of media types to be downloaded.
         Ex : `["audio", "photo"]`
         Supported formats:
             * audio
@@ -248,12 +246,9 @@ async def process_messages(
 
     Parameters
     ----------
-    client: pyrogram.client.Client
-        Client to interact with Telegram APIs.
-    messages: list
-        List of telegram messages.
-    media_types: list
-        List of strings of media types to be downloaded.
+    client: pyrogram.client.Client         to interact with Telegram APIs.
+    messages: list         of telegram messages.
+    media_types: list         of strings of media types to be downloaded.
         Ex : `["audio", "photo"]`
         Supported formats:
             * audio
@@ -355,6 +350,8 @@ async def begin_import(config: dict, pagination_limit: int) -> dict:
 
 def main():
     """Main function of the downloader."""
+    # 添加一个方法: 将自己的配置文件移动到当前的工作目录
+
     with open(os.path.join(THIS_DIR, "config.yaml")) as f:
         config = yaml.safe_load(f)
     updated_config = asyncio.get_event_loop().run_until_complete(
