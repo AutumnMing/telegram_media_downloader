@@ -30,19 +30,19 @@ FAILED_IDS: list = []
 DOWNLOADED_IDS: list = []
 
 
-def update_config(config: dict):
+def update_config(config: dict, config_name='config.yaml'):
     """
-    Update existing configuration file.
-
-    Parameters
-    ----------
-    config: dict
+        Update existing configuration file.
+    :param config: dict
         Configuration to be written into config file.
+    :param config_name: 配置文件名称
+    :return:
     """
     config["ids_to_retry"] = (
             list(set(config["ids_to_retry"]) - set(DOWNLOADED_IDS)) + FAILED_IDS
     )
-    with open("config.yaml", "w") as yaml_file:
+    config_name = os.path.join(THIS_DIR, 'config', config_name)
+    with open(config_name, "w") as yaml_file:
         yaml.dump(config, yaml_file, default_flow_style=False)
     logger.info("Updated last read message_id to config file")
 
@@ -348,11 +348,11 @@ async def begin_import(config: dict, pagination_limit: int) -> dict:
     return config
 
 
-def main():
+def main(config_name='config.yaml'):
     """Main function of the downloader."""
     # 添加一个方法: 将自己的配置文件移动到当前的工作目录
 
-    with open(os.path.join(THIS_DIR, "config.yaml")) as f:
+    with open(os.path.join(THIS_DIR, 'config', config_name)) as f:
         config = yaml.safe_load(f)
     updated_config = asyncio.get_event_loop().run_until_complete(
         begin_import(config, pagination_limit=100)
@@ -370,4 +370,5 @@ def main():
 
 if __name__ == "__main__":
     print_meta(logger)
-    main()
+    main(config_name='1876830704.yaml')
+
