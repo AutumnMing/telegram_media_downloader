@@ -3,6 +3,7 @@ import asyncio
 import logging
 import os
 from typing import List, Optional, Tuple, Union
+from pathlib import Path
 
 import pyrogram
 import yaml
@@ -348,6 +349,53 @@ async def begin_import(config: dict, pagination_limit: int) -> dict:
     return config
 
 
+def move_files(config):
+    media_types = config.get('media_types')
+
+    # 获取存在的默认下载路径
+    this_dir = Path(THIS_DIR)
+    download_path = [this_dir.joinpath(media_type) for media_type in media_types]
+    download_path = [each for each in download_path if each.exists()]
+
+    base_save_path = Path(config.get('save_path')).joinpath(str(config.get('config_name')))
+    save_path = [base_save_path.joinpath(each.name) for each in download_path]
+
+    for d_path, s_path in zip(download_path, save_path):
+
+        if not s_path.exists():
+            s_path.mkdir(parents=True, exist_ok=True)
+
+        for old_file_path in d_path.iterdir():
+
+            if old_file_path.is_file():
+                new_file_path = s_path.joinpath(old_file_path.name)
+
+                if not new_file_path.exists():
+                    old_file_path.rename(new_file_path)
+                    print(f'{old_file_path.name} 移动到: {s_path}')
+
+                old_file_path.unlink(missing_ok=True)
+
+
+def get_configs(config_path: Optional[str] = None):
+    if config_path is None:
+        config_path = Path(THIS_DIR).joinpath('config')
+        return [config_name.name for config_name in config_path.iterdir() if config_name.is_file()]
+
+    if config_path:
+        return [config_name.name for config_name in Path(config_path).iterdir() if config_name.is_file()]
+
+
+def clean_configs(configs: List, exit_config: str | List[str]):
+    if isinstance(exit_config, str):
+        exit_config = exit_config + '.yaml'
+        configs.remove(exit_config)
+        return configs
+    if isinstance(configs, list):
+        exit_config = [each + '.yaml' for each in exit_config if not each.endswith('.yaml')]
+        return [each for each in configs if each not in exit_config]
+
+
 def main(config_name='config.yaml'):
     """Main function of the downloader."""
     # 添加一个方法: 将自己的配置文件移动到当前的工作目录
@@ -357,6 +405,7 @@ def main(config_name='config.yaml'):
     updated_config = asyncio.get_event_loop().run_until_complete(
         begin_import(config, pagination_limit=100)
     )
+
     if FAILED_IDS:
         logger.info(
             "Downloading of %d files failed. "
@@ -364,11 +413,19 @@ def main(config_name='config.yaml'):
             "These files will be downloaded on the next run.",
             len(set(FAILED_IDS)),
         )
-    update_config(updated_config)
+    update_config(updated_config, config_name=config_name)
     check_for_updates()
+    return config
 
 
 if __name__ == "__main__":
-    print_meta(logger)
-    main(config_name='1876830704.yaml')
+    # print_meta(logger)
 
+    # config_list = get_configs()
+    # config_list = clean_configs(config_list, exit_config=['1876830704', 'config', '1375749305', ])
+    # , 'LX8827.yaml'
+    config_list = ['1840324179.yaml', '2041480241.yaml']
+    for cfg_name in config_list:
+        print(f'正在采集配置文件: {cfg_name}')
+        cfg = main(config_name=cfg_name)
+        move_files(config=cfg)
