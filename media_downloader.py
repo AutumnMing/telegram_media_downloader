@@ -399,6 +399,8 @@ def clean_configs(configs: List, exit_config: str | List[str]):
 def main(config_name='config.yaml'):
     """Main function of the downloader."""
     # 添加一个方法: 将自己的配置文件移动到当前的工作目录
+    if not config_name.endswith('.yaml'):
+        config_name = config_name + '.yaml'
 
     with open(os.path.join(THIS_DIR, 'config', config_name)) as f:
         config = yaml.safe_load(f)
@@ -423,8 +425,8 @@ if __name__ == "__main__":
 
     # config_list = get_configs()
     # config_list = clean_configs(config_list, exit_config=['1876830704', 'config', '1375749305', ])
-    # , 'LX8827.yaml'
-    config_list = ['1840324179.yaml', '2041480241.yaml']
+    # , 'LX8827.yaml'  ,
+    config_list = ['Axibaby456', 'jiaozir', '1685761356', '1957640302', 'zm7788kl', '1792599709', '1748824124']
     for cfg_name in config_list:
         print(f'正在采集配置文件: {cfg_name}')
         cfg = main(config_name=cfg_name)
