@@ -424,10 +424,40 @@ if __name__ == "__main__":
     # print_meta(logger)
 
     # config_list = get_configs()
-    # config_list = clean_configs(config_list, exit_config=['1876830704', 'config', '1375749305', ])
-    # , 'LX8827.yaml'  ,
-    config_list = ['Axibaby456', 'jiaozir', '1685761356', '1957640302', 'zm7788kl', '1792599709', '1748824124']
+
+    config_list = [
+        # 'LX8827',
+        # '1729331283',  # 安琪のvip频道
+        # '6309345232',  # yoni -- yonilovepeach
+        '1957640302',  # 三角圆
+        # 'yaminalxyy',  # 自己的
+        # 'amy369500',
+        # # '1673815557', # OF-358、yuzukitty
+        #
+        # '1511051095',  # puppy
+        # 'anqi000707',
+        # '1957640302',
+        #
+        # '1748824124',  # 星野
+        # '1767283863',
+        # '1792599709',
+        # '1809624965',
+        # '1648547609',
+        # '1925710919',  # susuysu
+        # '1876830704',
+        # '1809624965',
+        # '1599797657',
+        # 'molikeai',
+
+        # '1375749305',
+        # '1476985819',
+        # 'xyberdolls'
+        # '1685761356'
+    ]
     for cfg_name in config_list:
+        print('\n')
         print(f'正在采集配置文件: {cfg_name}')
         cfg = main(config_name=cfg_name)
         move_files(config=cfg)
+        print(f'配置文件: {cfg_name} 采集完成')
+        print('\n')
