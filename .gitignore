@@ -10,6 +10,7 @@
 .coverage
 settings.json
 config
+config.yaml
 
 # Distribution / packaging
 .Python
