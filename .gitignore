@@ -9,6 +9,7 @@
 .mypy_cache/
 .coverage
 settings.json
+config
 
 # Distribution / packaging
 .Python
