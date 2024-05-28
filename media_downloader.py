@@ -426,8 +426,8 @@ if __name__ == "__main__":
     # config_list = get_configs()
 
     config_list = [
-        # 'XGpuppy',
-        # 'LX8827',
+        'XGpuppy',
+        'LX8827',
         '1729331283',  # 安琪のvip频道
         # '6309345232',  # yoni -- yonilovepeach
         '1957640302',  # 三角圆
